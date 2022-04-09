@@ -60,7 +60,9 @@ start = time.time() # 시간 측정 시작
 # 데이터 프레임 저장할 곳
 depth_mean = []
 depth_min = []
-depth_info = pd.DataFrame(columns={'depth_min','depth_mean'})
+depth_x = []
+depth_y = []
+depth_info = pd.DataFrame(columns={'depth_min','depth_mean','depth_x','depth_y'})
 
 for k in range(len(train_image_list)): # 7481개의 데이터
     # 진행 상황 알라기
@@ -82,7 +84,10 @@ for k in range(len(train_image_list)): # 7481개의 데이터
     for (xmin, ymin, xmax, ymax) in coordinates_array:
         depth_mean_info = prediction[int(ymin):int(ymax),int(xmin):int(xmax)].mean()
         depth_min_info = prediction[int(ymin):int(ymax),int(xmin):int(xmax)].min()
-        
+        xy = np.where(prediction==depth_min_info)
+
+        depth_x.append(xy[1][0])
+        depth_y.append(xy[0][0])
         depth_mean.append(depth_mean_info)
         depth_min.append(depth_min_info)
 
@@ -96,6 +101,8 @@ depth_info.isnull().sum(axis=0)
 # 데이터 저장
 depth_info['depth_mean'] = depth_mean
 depth_info['depth_min'] = depth_min
+depth_info['depth_x'] = depth_x
+depth_info['depth_y'] = depth_y
 
 # 데이터 병합
 glp_kitti_preprocessing_data = pd.concat([glp_kitti_preprocessing_data, depth_info], axis=1)
