@@ -4,7 +4,7 @@
 
 
 # 1. 데이터셋 다운 받기
-구글드라이브에 접속 후, 프로젝트 폴더안의'./datasets/data/' 경로에 다운
+구글드라이브에 접속 후, 프로젝트 폴더안의'./datasets/data/' 경로에 다운 \n
 폴더의 'image', 'VKITTI', 'VKITTI_txt' 이렇게 3개가 나오도록 설정.
 
 # 2. 데이터셋 Preprocessing
