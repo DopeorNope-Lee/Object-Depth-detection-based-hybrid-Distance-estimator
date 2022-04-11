@@ -3,6 +3,7 @@
 Created on Mon Apr 11 10:24:04 2022
 
 @author: ODD
+# 출처: https://velog.io/@devlee247/Pytorch%EC%9D%98-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%B2%98%EB%A6%AC-Dataset-Dataloader
 """
 
 import pandas as pd
