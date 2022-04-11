@@ -46,27 +46,29 @@ class DETR():
         ])
        
        # 모델 불러오기
-       # DETR Resnet50 or DETR Resnet101
+       # DETR Resnet50 or DETR Resnet101   
        self.model = torch.hub.load(model_path, backbone, pretrained=True)
        self.model.eval()
+       
+       self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
        
     # for output bounding box post-processing
     def box_cxcywh_to_xyxy(self, x):
         x_c, y_c, w, h = x.unbind(1)
         b = [(x_c - 0.5 * w), (y_c - 0.5 * h),
              (x_c + 0.5 * w), (y_c + 0.5 * h)]
-        return torch.stack(b, dim=1)
+        return torch.stack(b, dim=1).to(self.device)
     
     def rescale_bboxes(self, out_bbox, size):
         img_w, img_h = size
         b = self.box_cxcywh_to_xyxy(out_bbox)
-        b = b * torch.tensor([img_w, img_h, img_w, img_h], dtype=torch.float32)
+        b = b * torch.tensor([img_w, img_h, img_w, img_h], dtype=torch.float32).to(self.device)
         return b
     
     # 4. Detection
     def detect(self, im):
         # mean-std normalize the input image (batch-size: 1)
-        img = self.transform(im).unsqueeze(0)
+        img = self.transform(im).unsqueeze(0).to(self.device)
     
         # demo model only support by default images with aspect ratio between 0.5 and 2
         # if you want to use images with an aspect ratio outside this range
