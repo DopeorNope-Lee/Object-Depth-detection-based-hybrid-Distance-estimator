@@ -8,6 +8,7 @@ Created on Mon Apr 11 10:24:04 2022
 
 import pandas as pd
 import torch
+import numpy as np
 
 class CustomDataset():
     def __init__(self, data, variable):

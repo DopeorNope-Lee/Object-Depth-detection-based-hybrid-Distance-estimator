@@ -23,6 +23,13 @@ kitti_train = glp_kitti_data.iloc[:22022,:]
 kitti_valid = glp_kitti_data.iloc[22022:28314,:]
 kitti_test = glp_kitti_data.iloc[28314:,:]
 
+# width, height 열 추가
+kitti_train['width'] = kitti_train['xmax'] - kitti_train['xmin']
+kitti_train['height'] = kitti_train['ymax'] - kitti_train['ymin']
+kitti_valid['width'] = kitti_valid['xmax'] - kitti_valid['xmin']
+kitti_valid['height'] = kitti_valid['ymax'] - kitti_valid['ymin']
+kitti_test['width'] = kitti_test['xmax'] - kitti_test['xmin']
+kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
 # 저장
 kitti_train.to_csv('./kitti_train.csv', mode='a', index=False)
 kitti_valid.to_csv('./kitti_valid.csv', mode='a', index=False)
