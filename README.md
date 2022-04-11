@@ -19,3 +19,14 @@ i) KITTI
 
 ii) VKITTI2  
 1. './datasets/data/make_vkitti_dataset.py'  -- VKITTI 데이터 안에 있는 모든 Scene과 각각의 weather 정보에 대해서 데이터 정리  
+
+# ㅡㅡ Reference ㅡㅡ
+- Dataset  
+http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=2d  
+https://europe.naverlabs.com/research/computer-vision/proxy-virtual-worlds-vkitti-2/  
+
+- Model  
+https://github.com/vinvino02/GLPDepth  
+https://github.com/isl-org/MiDaS  
+https://github.com/isl-org/DPT  
+https://github.com/facebookresearch/detr  
