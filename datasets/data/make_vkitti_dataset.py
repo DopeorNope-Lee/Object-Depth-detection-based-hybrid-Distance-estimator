@@ -7,30 +7,13 @@ Created on Sat Apr  9 03:55:25 2022
 """
 
 # 1. Import Module
-import os, sys
-import random
-#import itertools
-#import io
-#import math
+import os
 import pandas as pd
-import numpy as np
-import numpy
-import matplotlib.pyplot as plt
 import torch
-import torch.nn as nn
-import cv2
-import pandas as pd
-import math
 import time
 
 from tqdm import tqdm
 
-from torchvision import datasets, transforms
-from transformers import GLPNForDepthEstimation, GLPNFeatureExtractor
-from PIL import Image
-
-from model.detr import DETR
-from model.glpdepth import GLP
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 ################################################################################################################################
@@ -177,7 +160,7 @@ scene20_morning_pose = pd.read_csv('./VKITTI_txt/Scene20/morning/pose.txt', deli
 
 scene20_overcast = os.listdir('./VKITTI/Scene20/overcast/frames/rgb/Camera_1/')
 scene20_overcast_bbox = pd.read_csv('./VKITTI_txt/Scene20/overcast/bbox.txt', delimiter=' ')
-scene20_overcast_info = pd.read_csv('./VKITTI_txt/Scene02/overcast/info.txt', delimiter=' ')
+scene20_overcast_info = pd.read_csv('./VKITTI_txt/Scene20/overcast/info.txt', delimiter=' ')
 scene20_overcast_pose = pd.read_csv('./VKITTI_txt/Scene20/overcast/pose.txt', delimiter=' ')
 
 scene20_rain = os.listdir('./VKITTI/Scene20/rain/frames/rgb/Camera_1/')
@@ -204,7 +187,8 @@ length = len(scene1_clone) // 6
 
 scene1_vkitti_data = pd.DataFrame()
 
-for i in range(6):
+for i in tqdm(range(6)):
+    print('scene1 중',(i+1),'번째 데이터 정제 중')
     # 데이터 feature 추출
     # 'clone'
     if i == 0:
@@ -435,10 +419,13 @@ for i in range(6):
         # 데이터 최종 병합
         scene1_vkitti_data = pd.concat([scene1_vkitti_data, scene1_sunset_data], axis=0)
 
+scene1_vkitti_data['filename'] = ['scene1_'+name for name in scene1_vkitti_data['filename']]
+
 scene1_vkitti_data.isnull().sum(axis=0)
-scene1_vkitti_data.to_csv('./scene1_vkitti_data.csv', mode='a', index=False)
+#scene1_vkitti_data.to_csv('./scene1_vkitti_data.csv', mode='a', index=False)
 
 print('scene1 end')
+
 
 #########################################################################################################################
 # Scene2
@@ -447,7 +434,8 @@ length = len(scene2_clone) // 6
 
 scene2_vkitti_data = pd.DataFrame()
 
-for i in range(6):
+for i in tqdm(range(6)):
+    print('scene2 중',(i+1),'번째 데이터 정제 중')
     # 데이터 feature 추출
     # 'clone'
     if i == 0:
@@ -481,7 +469,7 @@ for i in range(6):
         scene2_clone_data['weather'] = 'clone'
         scene2_clone_data['class'].replace({'Car':'car', 'Van':'car', 'Truck':'truck'}, inplace=True)
 
-        set_filename = scene2_clone[length*i:length*(i+1)]
+        set_filename = scene2_clone[length*(i):length*(i+1)]
         mask = [index for index in range(len(scene2_clone_data)) if scene2_clone_data['filename'].values[index] in set_filename]
         scene2_clone_data = scene2_clone_data.iloc[mask]
 
@@ -522,7 +510,7 @@ for i in range(6):
         set_filename = scene2_fog[length*i:length*(i+1)]
         mask = [index for index in range(len(scene2_fog_data)) if scene2_fog_data['filename'].values[index] in set_filename]
         scene2_fog_data = scene2_fog_data.iloc[mask]
-
+        
         # 데이터 최종 병합
         scene2_vkitti_data = pd.concat([scene2_vkitti_data, scene2_fog_data], axis=0)
         
@@ -677,9 +665,11 @@ for i in range(6):
 
         # 데이터 최종 병합
         scene2_vkitti_data = pd.concat([scene2_vkitti_data, scene2_sunset_data], axis=0)
+        
+scene2_vkitti_data['filename'] = ['scene2_'+name for name in scene2_vkitti_data['filename']]
 
 scene2_vkitti_data.isnull().sum(axis=0)
-scene2_vkitti_data.to_csv('./scene2_vkitti_data.csv', mode='a', index=False)
+#scene2_vkitti_data.to_csv('./scene2_vkitti_data.csv', mode='a', index=False)
 
 print('scene2 end')
 
@@ -690,7 +680,8 @@ length = len(scene6_clone) // 6
 
 scene6_vkitti_data = pd.DataFrame()
 
-for i in range(6):
+for i in tqdm(range(6)):
+    print('scene6 중',(i+1),'번째 데이터 정제 중')
     # 데이터 feature 추출
     # 'clone'
     if i == 0:
@@ -920,9 +911,11 @@ for i in range(6):
 
         # 데이터 최종 병합
         scene6_vkitti_data = pd.concat([scene6_vkitti_data, scene6_sunset_data], axis=0)
+        
+scene6_vkitti_data['filename'] = ['scene6_'+name for name in scene6_vkitti_data['filename']]
 
 scene6_vkitti_data.isnull().sum(axis=0)
-scene6_vkitti_data.to_csv('./scene6_vkitti_data.csv', mode='a', index=False)
+#scene6_vkitti_data.to_csv('./scene6_vkitti_data.csv', mode='a', index=False)
 
 print('scene6 end')
 
@@ -933,7 +926,8 @@ length = len(scene18_clone) // 6
 
 scene18_vkitti_data = pd.DataFrame()
 
-for i in range(6):
+for i in tqdm(range(6)):
+    print('scene18 중',(i+1),'번째 데이터 정제 중')
     # 데이터 feature 추출
     # 'clone'
     if i == 0:
@@ -1163,9 +1157,11 @@ for i in range(6):
 
         # 데이터 최종 병합
         scene18_vkitti_data = pd.concat([scene18_vkitti_data, scene18_sunset_data], axis=0)
+        
+scene18_vkitti_data['filename'] = ['scene18_'+name for name in scene18_vkitti_data['filename']]
 
 scene18_vkitti_data.isnull().sum(axis=0)
-scene18_vkitti_data.to_csv('./scene18_vkitti_data.csv', mode='a', index=False)
+#scene18_vkitti_data.to_csv('./scene18_vkitti_data.csv', mode='a', index=False)
 
 print('scene18 end')
 
@@ -1176,7 +1172,8 @@ length = len(scene20_clone) // 6
 
 scene20_vkitti_data = pd.DataFrame()
 
-for i in range(6):
+for i in tqdm(range(6)):
+    print('scene20 중',(i+1),'번째 데이터 정제 중')
     # 데이터 feature 추출
     # 'clone'
     if i == 0:
@@ -1406,12 +1403,21 @@ for i in range(6):
 
         # 데이터 최종 병합
         scene20_vkitti_data = pd.concat([scene20_vkitti_data, scene20_sunset_data], axis=0)
+        
+scene20_vkitti_data['filename'] = ['scene20_'+name for name in scene20_vkitti_data['filename']]
 
 scene20_vkitti_data.isnull().sum(axis=0)
-scene20_vkitti_data.to_csv('./scene20_vkitti_data.csv', mode='a', index=False)
+#scene20_vkitti_data.to_csv('./scene20_vkitti_data.csv', mode='a', index=False)
 
 print('scene20 end')
 
 print('Finish')
 end = time.time() # 시간 측정 끝
-print(f"{end - start:.5f} sec") # 
+print(f"{end - start:.5f} sec") #29.84161 sec
+
+
+# 데이터 최종 병합
+vkitti_annotations = pd.DataFrame()
+for data in [scene1_vkitti_data, scene2_vkitti_data, scene6_vkitti_data, scene18_vkitti_data, scene20_vkitti_data]:
+    vkitti_annotations = pd.concat([vkitti_annotations, data], axis=0)
+vkitti_annotations.to_csv('../vkitti_annotations.csv', mode='a', index=False)

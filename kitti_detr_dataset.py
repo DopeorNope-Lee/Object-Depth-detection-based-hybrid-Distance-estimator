@@ -7,30 +7,18 @@ Created on Sat Apr  9 03:55:25 2022
 """
 
 # 1. Import Module
-import os, sys
-import random
-#import itertools
-#import io
-#import math
-import pandas as pd
+import os
 import numpy as np
 import numpy
-import matplotlib.pyplot as plt
 import torch
-import torch.nn as nn
 import cv2
 import pandas as pd
-import math
 import time
-
 from tqdm import tqdm
-
-from torchvision import datasets, transforms
-from transformers import GLPNForDepthEstimation, GLPNFeatureExtractor
 from PIL import Image
-
 from model.detr import DETR
 from model.glpdepth import GLP
+
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 ################################################################################################################################
@@ -64,11 +52,6 @@ CLASSES = [
     'toothbrush'
 ]
 
-# GLPdepth 불러오기
-glp_pretrained = 'vinvino02/glpn-kitti'
-GLPdepth = GLP(glp_pretrained)
-GLPdepth.model.eval()
-
 # DETR 불러오기
 model_path = 'facebookresearch/detr:main'
 model_backbone = 'detr_resnet101'
@@ -90,7 +73,7 @@ start = time.time() # 시간 측정 시작
 glp_kitti_preprocessing_data = pd.DataFrame()
 
 # 내가 원하는 이미지
-for k in range(len(train_image_list)): # 7481개의 데이터
+for k in tqdm(range(len(train_image_list))): # 7481개의 데이터
     # 진행 상황 알라기
     print('이미지 전체 {} 중 {}번째 진행중'.format(len(train_image_list), k+1))
 

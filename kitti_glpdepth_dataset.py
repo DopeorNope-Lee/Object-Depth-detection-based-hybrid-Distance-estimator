@@ -7,29 +7,15 @@ Created on Sat Apr  9 03:55:25 2022
 """
 
 # 1. Import Module
-import os, sys
-import random
-#import itertools
-#import io
-#import math
+import os
 import pandas as pd
 import numpy as np
 import numpy
-import matplotlib.pyplot as plt
 import torch
-import torch.nn as nn
 import cv2
-import pandas as pd
-import math
 import time
-
 from tqdm import tqdm
-
-from torchvision import datasets, transforms
-from transformers import GLPNForDepthEstimation, GLPNFeatureExtractor
 from PIL import Image
-
-from model.detr import DETR
 from model.glpdepth import GLP
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -64,7 +50,7 @@ depth_x = []
 depth_y = []
 depth_info = pd.DataFrame(columns={'depth_min','depth_mean','depth_x','depth_y'})
 
-for k in range(len(train_image_list)): # 7481개의 데이터
+for k in tqdm(range(len(train_image_list))): # 7481개의 데이터
     # 진행 상황 알라기
     print('이미지 전체 {} 중 {}번째 진행중'.format(len(train_image_list), k+1))
     
