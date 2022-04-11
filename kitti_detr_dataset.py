@@ -94,6 +94,8 @@ for k in tqdm(range(len(train_image_list))): # 7481개의 데이터
     scores, boxes = DETR.detect(img) # Detection
     #prediction = GLPdepth.predict(img, img_shape) # Make Depth map
     
+    boxes = boxes.cpu() # cpu 전환
+    
     input_coordinates = [] # DETR's bounding box
     label = [] # detr label
 
