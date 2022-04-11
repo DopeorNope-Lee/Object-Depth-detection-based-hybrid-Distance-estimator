@@ -6,22 +6,19 @@ Created on Mon Apr 11 10:08:07 2022
 """
 
 import pandas as pd
-import shutil # image copy
-import numpy as np
-from sklearn.model_selection import train_test_split
 
 glp_kitti_data = pd.read_csv('./glp_kitti_data.csv')
 glp_kitti_data.info()
 
-# train: 70%, valid: 70%, test: 10%
+# train: 70%, valid: 15%, test: 15%
 length = len(glp_kitti_data)
-train_len = length*0.7
-valid_len = length*0.2
-test_len = length*0.1
+train_len = int(length*0.7)
+valid_len = int(length*0.15)
+test_len = int(length*0.15)
 
-kitti_train = glp_kitti_data.iloc[:22022,:]
-kitti_valid = glp_kitti_data.iloc[22022:28314,:]
-kitti_test = glp_kitti_data.iloc[28314:,:]
+kitti_train = glp_kitti_data.iloc[:train_len,:]
+kitti_valid = glp_kitti_data.iloc[train_len:(train_len+valid_len),:]
+kitti_test = glp_kitti_data.iloc[(train_len+valid_len):,:]
 
 # width, height 열 추가
 kitti_train['width'] = kitti_train['xmax'] - kitti_train['xmin']
