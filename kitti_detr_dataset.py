@@ -167,4 +167,4 @@ glp_kitti_preprocessing_data.isnull().sum(axis=0)
 glp_kitti_preprocessing_data.drop('real_class', axis=1, inplace=True)
 glp_kitti_preprocessing_data['weather'] = 'clone'
 
-glp_kitti_preprocessing_data.to_csv('./datasets/glp_kitti_preprocessing_data.csv', mode='a', index=False) # csv 저장
+glp_kitti_preprocessing_data.to_csv('./datasets/detr_kitti_preprocessing_data.csv', mode='a', index=False) # csv 저장
