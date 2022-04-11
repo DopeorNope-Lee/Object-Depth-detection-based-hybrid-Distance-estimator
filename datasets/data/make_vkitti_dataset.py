@@ -419,7 +419,7 @@ for i in tqdm(range(6)):
         # 데이터 최종 병합
         scene1_vkitti_data = pd.concat([scene1_vkitti_data, scene1_sunset_data], axis=0)
 
-scene1_vkitti_data['filename'] = ['scene1_'+name for name in scene1_vkitti_data['filename']]
+scene1_vkitti_data['filename'] = ['Scene01_'+name for name in scene1_vkitti_data['filename']]
 
 scene1_vkitti_data.isnull().sum(axis=0)
 #scene1_vkitti_data.to_csv('./scene1_vkitti_data.csv', mode='a', index=False)
@@ -666,7 +666,7 @@ for i in tqdm(range(6)):
         # 데이터 최종 병합
         scene2_vkitti_data = pd.concat([scene2_vkitti_data, scene2_sunset_data], axis=0)
         
-scene2_vkitti_data['filename'] = ['scene2_'+name for name in scene2_vkitti_data['filename']]
+scene2_vkitti_data['filename'] = ['Scene02_'+name for name in scene2_vkitti_data['filename']]
 
 scene2_vkitti_data.isnull().sum(axis=0)
 #scene2_vkitti_data.to_csv('./scene2_vkitti_data.csv', mode='a', index=False)
@@ -912,7 +912,7 @@ for i in tqdm(range(6)):
         # 데이터 최종 병합
         scene6_vkitti_data = pd.concat([scene6_vkitti_data, scene6_sunset_data], axis=0)
         
-scene6_vkitti_data['filename'] = ['scene6_'+name for name in scene6_vkitti_data['filename']]
+scene6_vkitti_data['filename'] = ['Scene06_'+name for name in scene6_vkitti_data['filename']]
 
 scene6_vkitti_data.isnull().sum(axis=0)
 #scene6_vkitti_data.to_csv('./scene6_vkitti_data.csv', mode='a', index=False)
@@ -1158,7 +1158,7 @@ for i in tqdm(range(6)):
         # 데이터 최종 병합
         scene18_vkitti_data = pd.concat([scene18_vkitti_data, scene18_sunset_data], axis=0)
         
-scene18_vkitti_data['filename'] = ['scene18_'+name for name in scene18_vkitti_data['filename']]
+scene18_vkitti_data['filename'] = ['Scene18_'+name for name in scene18_vkitti_data['filename']]
 
 scene18_vkitti_data.isnull().sum(axis=0)
 #scene18_vkitti_data.to_csv('./scene18_vkitti_data.csv', mode='a', index=False)
@@ -1404,7 +1404,7 @@ for i in tqdm(range(6)):
         # 데이터 최종 병합
         scene20_vkitti_data = pd.concat([scene20_vkitti_data, scene20_sunset_data], axis=0)
         
-scene20_vkitti_data['filename'] = ['scene20_'+name for name in scene20_vkitti_data['filename']]
+scene20_vkitti_data['filename'] = ['Scene20_'+name for name in scene20_vkitti_data['filename']]
 
 scene20_vkitti_data.isnull().sum(axis=0)
 #scene20_vkitti_data.to_csv('./scene20_vkitti_data.csv', mode='a', index=False)
