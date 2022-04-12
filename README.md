@@ -48,6 +48,9 @@ glpdepth로 VKITTI image를 Depth map으로 표현 후, 위에서 나온 bbox로
 ```
 './datasets/train_test_split'
 ```  
+```
+KITTI dataset's ration == (train : Valid : Test = 7 : 1.5 : 1.5)
+```
 Preprocessing된 KITTI, VKITTI 데이터를 train, valid, test로 구분지어 준다. (width, height 변수 추가도 포함.)  
    
 ## Reference 
