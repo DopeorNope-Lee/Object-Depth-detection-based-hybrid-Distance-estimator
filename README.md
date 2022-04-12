@@ -3,7 +3,7 @@
 
 
 
-### 1. 데이터셋 다운 받기
+## 1. 데이터셋 다운 받기
 
 
 **드라이브**:
@@ -12,7 +12,7 @@ https://drive.google.com/file/d/1Yv-XkVmYVMIxMsoaX0wRP0uc7AgS9XTq/view?usp=shari
 구글드라이브에 접속 후, data.egg 파일을 프로젝트 폴더안의'./datasets/data/' 경로에 다운  
 폴더의 'image', 'VKITTI', 'VKITTI_txt' 이렇게 3개가 나오도록 설정.
 
-### 2. Preprocessing
+## 2. Preprocessing
 * KITTI
 ```
 ./kitti_detr_dataset.py
@@ -46,7 +46,7 @@ glpdepth로 VKITTI image를 Depth map으로 표현 후, 위에서 나온 bbox로
 ```  
 Preprocessing된 KITTI, VKITTI 데이터를 train, valid, test로 구분지어 준다. (width, height 변수 추가도 포함.)  
    
-### ㅡㅡ Reference ㅡㅡ
+## ㅡㅡ Reference ㅡㅡ
 - Dataset  
 http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=2d  
 https://europe.naverlabs.com/research/computer-vision/proxy-virtual-worlds-vkitti-2/  
