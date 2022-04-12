@@ -24,7 +24,7 @@ KITTI dataset이 나타내는 bbox와 DETR로 kitti image를 예측해서 나온
 ```  
 glpdepth로 KITTI image를 Depth map으로 표현 후, 위에서 나온 bbox로 Depth map을 잘라서(bbox 모양의 Depth map을 추출) 그 Depth map의 value(method: min, mean, ...)를 얻는다.   
    
-ii) VKITTI2  
+* VKITTI2  
 ```
 './datasets/data/make_vkitti_dataset.py' 
 ```  
@@ -38,10 +38,14 @@ VKITTI dataset이 나타내는 bbox와 DETR로 kitti image를 예측해서 나�
  ```
  './vkitti_glpdepth_dataset.py
  ```  
-glpdepth로 VKITTI image를 Depth map으로 표현 후, 위에서 나온 bbox로 Depth map을 잘라서(bbox 모양의 Depth map을 추출) 그 Depth map의 value(method: min, mean, ...)를 얻는다.    
-
-
-
+glpdepth로 VKITTI image를 Depth map으로 표현 후, 위에서 나온 bbox로 Depth map을 잘라서(bbox 모양의 Depth map을 추출) 그 Depth map의 value(method: min, mean, ...)를 얻는다.     
+  
+* Train, Validation, Test
+```
+'./datasets/train_test_split'
+```  
+Preprocessing된 KITTI, VKITTI 데이터를 train, valid, test로 구분지어 준다. (width, height 변수 추가도 포함.)  
+   
 ### ㅡㅡ Reference ㅡㅡ
 - Dataset  
 http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=2d  
