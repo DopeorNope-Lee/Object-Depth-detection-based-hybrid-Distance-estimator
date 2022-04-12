@@ -15,9 +15,11 @@ class GLP():
         
         self.model.eval()
         
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu') # 'cuda'
+        
     def predict(self, img, img_shape):
         with torch.no_grad(): # Depth map
-            pixel_values = self.feature_extractor(img, return_tensors="pt").pixel_values
+            pixel_values = self.feature_extractor(img, return_tensors="pt").pixel_values.to(self.device)
             outputs = self.model(pixel_values) 
             predicted_depth = outputs.predicted_depth
             
