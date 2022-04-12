@@ -12,6 +12,10 @@ https://drive.google.com/file/d/1Yv-XkVmYVMIxMsoaX0wRP0uc7AgS9XTq/view?usp=shari
 구글드라이브에 접속 후, data.egg 파일을 프로젝트 폴더안의'./datasets/data/' 경로에 다운  
 폴더의 'image', 'VKITTI', 'VKITTI_txt' 이렇게 3개가 나오도록 설정.
 
+```
+For example) './datasets/data/image' './datasets/data/VKITTI', './datasets/data/VKITTI_txt'
+```
+
 ## 2. Preprocessing
 * KITTI
 ```
