@@ -27,8 +27,13 @@ kitti_valid['width'] = kitti_valid['xmax'] - kitti_valid['xmin']
 kitti_valid['height'] = kitti_valid['ymax'] - kitti_valid['ymin']
 kitti_test['width'] = kitti_test['xmax'] - kitti_test['xmin']
 kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
+
 # 저장
 kitti_train.to_csv('./kitti_train.csv', mode='a', index=False)
 kitti_valid.to_csv('./kitti_valid.csv', mode='a', index=False)
 kitti_test.to_csv('./kitti_test.csv', mode='a', index=False)
+
+# vkitti는 보류
+#glp_vkitti_data = pd.read_csv('./glp_vkitti_data.csv')
+#glp_kitti_data.info()
 

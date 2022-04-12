@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr  9 03:55:25 2022
+Created on Tue Apr 12 10:33:23 2022
 
-@author: ODD Team
-# GLPdepth을 이용해서 DETR에서 뽑은 BBOX의 DEPTH info 뽑아서 저장하기
+@author: Admin
 """
 
 # 1. Import Module
@@ -21,8 +20,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 ################################################################################################################################
 # 2. Data 및 변수 세팅
-glp_kitti_preprocessing_data = pd.read_csv('./datasets/detr_kitti_preprocessing_data.csv')
-train_image_list = os.listdir('./datasets/data/image/train') # 7481
+glp_vkitti_preprocessing_data = pd.read_csv('./datasets/detr_vkitti_preprocessing_data.csv')
+basic_path = './datasets/data/VKITTI/'
+image_list = glp_vkitti_preprocessing_data['filename'].unique() # 2010
 
 ################################################################################################################################
 # 3. Model 불러오기
@@ -51,17 +51,27 @@ depth_x = []
 depth_y = []
 depth_info = pd.DataFrame(columns={'depth_min','depth_mean','depth_x','depth_y'})
 
-for k in tqdm(range(len(train_image_list))): # 7481개의 데이터
+for k in tqdm(range(len(image_list))): # 2021개의 데이터
     # 진행 상황 알라기
-    print('이미지 전체 {} 중 {}번째 진행중'.format(len(train_image_list), k+1))
+    if k % 50 == 0:
+        print('이미지 전체 {} 중 {}번째 진행중'.format(len(image_list), k+1))
     
-    # k번째 이미지
-    filename = train_image_list[k]
+    # choose df
+    mask = glp_vkitti_preprocessing_data['filename'] == image_list[k]
+    df_choose = glp_vkitti_preprocessing_data.loc[mask]
     
-    img = Image.open(os.path.join('./datasets/data/image/train/',filename))
-    img_shape = cv2.imread(os.path.join('./datasets/data/image/train/',filename)).shape
+    # Image Path
+    name_split = image_list[k].split('_')
+    scene = name_split[0] 
+    img_name = name_split[1]+'_'+name_split[2]
+    weather = df_choose['weather'].values[0]
     
-    df_choose = glp_kitti_preprocessing_data[glp_kitti_preprocessing_data['filename']==filename]
+    path = basic_path + scene + '/' + weather + '/' + 'frames/rgb/Camera_1/' + img_name 
+    
+    # 이미지 open and make Variable
+    img = Image.open(path)
+    img_shape = cv2.imread(path).shape
+    
     coordinates_array = df_choose[['xmin','ymin','xmax','ymax']].values
     
     # Make depth map
@@ -88,11 +98,11 @@ for k in tqdm(range(len(train_image_list))): # 7481개의 데이터
 # Check time
 print('Finish')
 end = time.time() # 시간 측정 끝
-print(f"{end - start:.5f} sec") # 24123.74032 sec
+print(f"{end - start:.5f} sec") # 243.08134 sec
 
 # 인덱스 재설정
-glp_kitti_preprocessing_data.reset_index(inplace=True)
-glp_kitti_preprocessing_data.drop('index', axis=1, inplace=True)
+glp_vkitti_preprocessing_data.reset_index(inplace=True)
+glp_vkitti_preprocessing_data.drop('index', axis=1, inplace=True)
 
 # 데이터 저장
 depth_info['depth_mean'] = depth_mean
@@ -104,7 +114,7 @@ depth_info['depth_y'] = depth_y
 depth_info.isnull().sum(axis=0)
 
 # 데이터 병합
-glp_kitti_preprocessing_data = pd.concat([glp_kitti_preprocessing_data, depth_info], axis=1)
+glp_vkitti_preprocessing_data = pd.concat([glp_vkitti_preprocessing_data, depth_info], axis=1)
 
 # 데이터 저장 (최종)
-glp_kitti_preprocessing_data.to_csv('./datasets/glp_kitti_data.csv', mode='a', index=False)
+glp_vkitti_preprocessing_data.to_csv('./datasets/glp_vkitti_data.csv', mode='a', index=False)
