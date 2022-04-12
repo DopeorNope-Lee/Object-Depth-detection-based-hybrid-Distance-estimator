@@ -19,7 +19,7 @@ For example) './datasets/data/image', './datasets/data/VKITTI', './datasets/data
 ## 2. Preprocessing
 * KITTI
 ```
-./kitti_detr_dataset.py
+'./kitti_detr_dataset.py'
 ```  
 KITTI dataset이 나타내는 bbox와 DETR로 kitti image를 예측해서 나온 bbox가 무엇인지 비교하교, 실제 데이터의 bbox가 가르킨 객체를 DETR이 어떤 bbox로 표현해서 예측했는지 비교해서 DETR의 bbox만 저장하기.  
   
@@ -50,7 +50,7 @@ glpdepth로 VKITTI image를 Depth map으로 표현 후, 위에서 나온 bbox로
 ```  
 Preprocessing된 KITTI, VKITTI 데이터를 train, valid, test로 구분지어 준다. (width, height 변수 추가도 포함.)  
    
-## ㅡㅡ Reference ㅡㅡ
+## Reference 
 - Dataset  
 http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=2d  
 https://europe.naverlabs.com/research/computer-vision/proxy-virtual-worlds-vkitti-2/  
