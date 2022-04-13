@@ -22,7 +22,6 @@ class CustomDataset():
         if scaler==True:
             self.inp = self.scaler.fit_transform(self.inp)
 	
-	
     def __len__(self):
 		# 가지고 있는 데이터셋의 길이를 반환한다.
         return len(self.inp) # 1314
