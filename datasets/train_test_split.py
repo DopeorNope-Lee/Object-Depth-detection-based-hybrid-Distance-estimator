@@ -35,6 +35,7 @@ kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
 
 # KITTI_VKITTI (7:1.5:1.5)
 glp_vkitti_data = pd.read_csv('./glp_vkitti_data.csv')
+glp_vkitti_data = glp_vkitti_data[glp_kitti_data.columns]
 vkitti_length = len(glp_vkitti_data)
 train_len = int(vkitti_length*0.7)
 valid_len = int(vkitti_length*0.15)
@@ -55,7 +56,7 @@ vkitti_test['height'] = vkitti_test['ymax'] - vkitti_test['ymin']
 # VKITTI와 KITTI 
 vkitti_train = pd.concat([vkitti_train, kitti_train])
 vkitti_valid = pd.concat([vkitti_valid, kitti_valid])
-vkitti_test = pd.concat([vkitti_valid, kitti_test])
+vkitti_test = pd.concat([vkitti_test, kitti_test])
 
 # 저장
 vkitti_train.to_csv('./vkitti_kitti_train.csv', mode='a', index=False)
