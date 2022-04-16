@@ -7,9 +7,9 @@ Created on Mon Apr 11 10:24:04 2022
 """
 
 import pandas as pd
-import torch
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler 
+import torch
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 class CustomDataset():
     def __init__(self, data, variable, scaler=False):
@@ -17,7 +17,8 @@ class CustomDataset():
         self.inp = self.df[variable].values
         self.outp = self.df[['zloc']].values # zloc
         
-        self.scaler = MinMaxScaler()
+        #self.scaler = MinMaxScaler()
+        self.scaler = StandardScaler()
         
         if scaler==True:
             self.inp = self.scaler.fit_transform(self.inp)
