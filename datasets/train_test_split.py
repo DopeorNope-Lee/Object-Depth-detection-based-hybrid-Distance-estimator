@@ -49,6 +49,9 @@ vkitti_kitti_data.drop('index', axis=1, inplace=True)
 split = StratifiedShuffleSplit(n_splits = 1, test_size = 0.15, random_state = 42)
 for train_idx, test_idx in split.split(vkitti_kitti_data, vkitti_kitti_data['weather']):
     vkitti_kitti_test = vkitti_kitti_data.loc[test_idx]
+    vkitti_kitti_test['width'] = vkitti_kitti_test['xmax'] - vkitti_kitti_test['xmin']
+    vkitti_kitti_test['height'] = vkitti_kitti_test['ymax'] - vkitti_kitti_test['ymin']
+    
     
     vkitti_kitti_train0 = vkitti_kitti_data.loc[train_idx]
     vkitti_kitti_train0.reset_index(inplace=True)
@@ -58,7 +61,12 @@ for train_idx, test_idx in split.split(vkitti_kitti_data, vkitti_kitti_data['wea
     split0 = StratifiedShuffleSplit(n_splits = 1, test_size = 0.17648, random_state = 42)
     for train_idx, valid_idx in split0.split(vkitti_kitti_train0, vkitti_kitti_train0['weather']):
         vkitti_kitti_train = vkitti_kitti_train0.loc[train_idx]
+        vkitti_kitti_train['width'] = vkitti_kitti_train['xmax'] - vkitti_kitti_train['xmin']
+        vkitti_kitti_train['height'] = vkitti_kitti_train['ymax'] - vkitti_kitti_train['ymin']
+        
         vkitti_kitti_valid = vkitti_kitti_train0.loc[valid_idx]
+        vkitti_kitti_valid['width'] = vkitti_kitti_valid['xmax'] - vkitti_kitti_valid['xmin']
+        vkitti_kitti_valid['height'] = vkitti_kitti_valid['ymax'] - vkitti_kitti_valid['ymin']
         
         vkitti_kitti_train.reset_index(inplace=True)
         vkitti_kitti_train.drop('index', axis=1, inplace=True)
