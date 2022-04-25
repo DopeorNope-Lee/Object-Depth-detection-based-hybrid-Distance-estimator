@@ -34,7 +34,53 @@ kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
 #kitti_test.to_csv('./kitti_test.csv', mode='a', index=False)
 
 # KITTI_VKITTI (7:1.5:1.5)
+from sklearn.model_selection import StratifiedShuffleSplit
 glp_vkitti_data = pd.read_csv('./glp_vkitti_data.csv')
+glp_vkitti_data = glp_vkitti_data[glp_kitti_data.columns]
+
+vkitti_kitti_data = pd.concat([glp_kitti_data, glp_vkitti_data], axis=0)
+print(vkitti_kitti_data) # 44171개
+
+vkitti_kitti_data.reset_index(inplace=True)
+vkitti_kitti_data.drop('index', axis=1, inplace=True)
+
+
+# 데이터 추출
+split = StratifiedShuffleSplit(n_splits = 1, test_size = 0.15, random_state = 42)
+for train_idx, test_idx in split.split(vkitti_kitti_data, vkitti_kitti_data['weather']):
+    vkitti_kitti_test = vkitti_kitti_data.loc[test_idx]
+    
+    vkitti_kitti_train0 = vkitti_kitti_data.loc[train_idx]
+    vkitti_kitti_train0.reset_index(inplace=True)
+    vkitti_kitti_train0.drop('index', axis=1, inplace=True)
+    
+    # train-valid
+    split0 = StratifiedShuffleSplit(n_splits = 1, test_size = 0.17648, random_state = 42)
+    for train_idx, valid_idx in split0.split(vkitti_kitti_train0, vkitti_kitti_train0['weather']):
+        vkitti_kitti_train = vkitti_kitti_train0.loc[train_idx]
+        vkitti_kitti_valid = vkitti_kitti_train0.loc[valid_idx]
+        
+        vkitti_kitti_train.reset_index(inplace=True)
+        vkitti_kitti_train.drop('index', axis=1, inplace=True)
+        
+        vkitti_kitti_valid.reset_index(inplace=True)
+        vkitti_kitti_valid.drop('index', axis=1, inplace=True)
+        
+        
+print(len(vkitti_kitti_train)) # 30919
+print(len(vkitti_kitti_valid)) # 6626
+print(len(vkitti_kitti_test)) # 6626
+
+print(vkitti_kitti_train['weather'].value_counts()/len(vkitti_kitti_train))
+print(vkitti_kitti_valid['weather'].value_counts()/len(vkitti_kitti_valid))
+print(vkitti_kitti_test['weather'].value_counts()/len(vkitti_kitti_test))
+
+vkitti_kitti_train.to_csv('./vkitti_kitti_train.csv', mode='a', index=False)
+vkitti_kitti_valid.to_csv('./vkitti_kitti_valid.csv', mode='a', index=False)
+vkitti_kitti_test.to_csv('./vkitti_kitti_test.csv', mode='a', index=False)
+
+
+'''
 glp_vkitti_data = glp_vkitti_data[glp_kitti_data.columns]
 vkitti_length = len(glp_vkitti_data)
 train_len = int(vkitti_length*0.7)
@@ -62,5 +108,5 @@ vkitti_test = pd.concat([vkitti_test, kitti_test])
 vkitti_train.to_csv('./vkitti_kitti_train.csv', mode='a', index=False)
 vkitti_valid.to_csv('./vkitti_kitti_valid.csv', mode='a', index=False)
 vkitti_test.to_csv('./vkitti_kitti_test.csv', mode='a', index=False)
-
+'''
 
