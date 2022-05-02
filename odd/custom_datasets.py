@@ -12,16 +12,19 @@ import torch
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 class CustomDataset():
-    def __init__(self, data, variable, scaler=False):
+    def __init__(self, data, variable, scaler=False, train=False):
         self.df=data
         self.inp = self.df[variable].values
         self.outp = self.df[['zloc']].values # zloc
         
         #self.scaler = MinMaxScaler()
-        self.scaler = StandardScaler()
+        if train==True:
+            self.scaler = StandardScaler().fit(self.inp)
+        else: 
+            self.scaler = train
         
         if scaler==True:
-            self.inp = self.scaler.fit_transform(self.inp)
+            self.inp = self.scaler.transform(self.inp)
 	
     def __len__(self):
 		# 가지고 있는 데이터셋의 길이를 반환한다.

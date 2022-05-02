@@ -28,6 +28,10 @@ kitti_valid['height'] = kitti_valid['ymax'] - kitti_valid['ymin']
 kitti_test['width'] = kitti_test['xmax'] - kitti_test['xmin']
 kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
 
+#print(kitti_train['class'].value_counts()/len(kitti_train))
+#print(kitti_valid['class'].value_counts()/len(kitti_valid))
+#print(kitti_test['class'].value_counts()/len(kitti_test))
+
 # 저장
 #kitti_train.to_csv('./kitti_train.csv', mode='a', index=False)
 #kitti_valid.to_csv('./kitti_valid.csv', mode='a', index=False)
