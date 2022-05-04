@@ -7,7 +7,8 @@ Created on Mon Apr 11 10:08:07 2022
 
 import pandas as pd
 
-glp_kitti_data = pd.read_csv('./glp_kitti_data.csv')
+#glp_kitti_data = pd.read_csv('./glp_kitti_data.csv')
+glp_kitti_data = pd.read_csv('./glp_kitti_data_1.csv')
 glp_kitti_data.info()
 
 # train: 70%, valid: 15%, test: 15%
@@ -33,10 +34,15 @@ kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
 #print(kitti_test['class'].value_counts()/len(kitti_test))
 
 # 저장
-#kitti_train.to_csv('./kitti_train.csv', mode='a', index=False)
-#kitti_valid.to_csv('./kitti_valid.csv', mode='a', index=False)
-#kitti_test.to_csv('./kitti_test.csv', mode='a', index=False)
+#kitti_train.to_csv('./kitti_train.csv', index=False)
+#kitti_valid.to_csv('./kitti_valid.csv', index=False)
+#kitti_test.to_csv('./kitti_test.csv', index=False)
 
+kitti_train.to_csv('./kitti_train_1.csv', index=False)
+kitti_valid.to_csv('./kitti_valid_1.csv', index=False)
+kitti_test.to_csv('./kitti_test_1.csv', index=False)
+
+'''
 # KITTI_VKITTI (7:1.5:1.5)
 from sklearn.model_selection import StratifiedShuffleSplit
 glp_vkitti_data = pd.read_csv('./glp_vkitti_data.csv')
@@ -90,7 +96,7 @@ print(vkitti_kitti_test['weather'].value_counts()/len(vkitti_kitti_test))
 vkitti_kitti_train.to_csv('./vkitti_kitti_train.csv', mode='a', index=False)
 vkitti_kitti_valid.to_csv('./vkitti_kitti_valid.csv', mode='a', index=False)
 vkitti_kitti_test.to_csv('./vkitti_kitti_test.csv', mode='a', index=False)
-
+'''
 
 '''
 glp_vkitti_data = glp_vkitti_data[glp_kitti_data.columns]
