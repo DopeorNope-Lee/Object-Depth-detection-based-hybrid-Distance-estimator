@@ -8,7 +8,9 @@ Created on Mon Apr 11 10:08:07 2022
 import pandas as pd
 
 #glp_kitti_data = pd.read_csv('./glp_kitti_data.csv')
-glp_kitti_data = pd.read_csv('./glp_kitti_data_1.csv')
+#glp_kitti_data = pd.read_csv('./glp_kitti_data_1.csv')
+glp_kitti_data = pd.read_csv('./glp_kitti_data_2.csv')
+glp_kitti_data = glp_kitti_data.sample(frac=1, random_state=42) 
 glp_kitti_data.info()
 
 # train: 70%, valid: 15%, test: 15%
@@ -38,9 +40,13 @@ kitti_test['height'] = kitti_test['ymax'] - kitti_test['ymin']
 #kitti_valid.to_csv('./kitti_valid.csv', index=False)
 #kitti_test.to_csv('./kitti_test.csv', index=False)
 
-kitti_train.to_csv('./kitti_train_1.csv', index=False)
-kitti_valid.to_csv('./kitti_valid_1.csv', index=False)
-kitti_test.to_csv('./kitti_test_1.csv', index=False)
+#kitti_train.to_csv('./kitti_train_1.csv', index=False)
+#kitti_valid.to_csv('./kitti_valid_1.csv', index=False)
+#kitti_test.to_csv('./kitti_test_1.csv', index=False)
+
+kitti_train.to_csv('./kitti_train_2.csv', index=False)
+kitti_valid.to_csv('./kitti_valid_2.csv', index=False)
+kitti_test.to_csv('./kitti_test_2.csv', index=False)
 
 '''
 # KITTI_VKITTI (7:1.5:1.5)
