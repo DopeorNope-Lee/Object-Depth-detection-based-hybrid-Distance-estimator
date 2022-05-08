@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn import metrics
 from sklearn import ensemble
 from sklearn.preprocessing import StandardScaler
-from custom_datasets import CustomDataset
+#from custom_datasets import CustomDataset
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import mean_absolute_error
@@ -26,6 +26,8 @@ from odd.gtts_mp3 import Warninggtts
 
 cap=cv2.VideoCapture(0)
 warn=Warninggtts("warningmessage.mp3")
+
+warn.speak()
 
 if cap.isOpened():
     while(True):
