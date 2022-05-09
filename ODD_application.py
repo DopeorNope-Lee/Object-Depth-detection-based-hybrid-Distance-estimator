@@ -1,4 +1,3 @@
-from warnings import WarningMessage
 from tqdm import tqdm
 import os
 import pandas as pd
@@ -6,28 +5,48 @@ import numpy as np
 import time
 import torch
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-from sklearn import metrics
-from sklearn import ensemble
 from sklearn.preprocessing import StandardScaler
-#from custom_datasets import CustomDataset
-from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import mean_absolute_error
-from gtts import gTTS
-import playsound
 import cv2
+from kitti_glpdepth_dataset import GLPdepth
 from model.detr import*
 from model.glpdepth import*
 from odd.gtts_mp3 import Warninggtts
+import xgboost as xgb
+import warnings
+
 
 
 ############################# Start ###########################
+warnings.filterwarnings(action='ignore')
 
+
+xgb_file="./odd/weights/lastxgb"
+detr_model=DETR()
+glp_model=GLP()
+xgb_model=xgb.XGBRegressor()
+xgb_model.load_model(xgb_file)
+warn=Warninggtts("warningmessage")
+warn.saving_speaking("물체가 근접합니다")
 cap=cv2.VideoCapture(0)
-warn=Warninggtts("warningmessage.mp3")
+warn1=Warninggtts("errorgmessage")
+warn1.saving_speaking("시스템이 정상 작동 하지 않습니다")
 
-warn.speak()
+
+def odd_process(zloc,speed):
+    if speed>=80: #여기서 스피드는 속력이 아니라 속도(상대적 속도임)
+        if zloc<50:
+            warn.speak()
+    elif speed>=40:
+        if zloc<30:
+            warn.speak()
+    elif speed>=10
+        if zloc<10:
+            warn.speak()
+
+
+
+
 
 if cap.isOpened():
     while(True):
@@ -37,12 +56,20 @@ if cap.isOpened():
             if cv2.waitKey(1) != -1:
                 cv2.imwrite('webcam_snap.jpg',frame)
                 break
+            #정상적인 케이스임
+            first_step = detr_model(frame)
+            second_step =GLPdepth(frame,first_step)
+            speed="계산 방법"
+            zloc= xgb_model.predict("여기서는 들어가는 최종 텐서를 맞추어서 넣어주면됨.")
+            odd_process(zloc,speed)
             
         else:
-            print("Can't reaceive the frame...")
+            print("프레임을 받을 수 없습니다.")
+            warn1.speak()
             break
 else:
     print('파일을 열 수 없습니다')
+    warn1.speak()
     
 
 cap.release()
