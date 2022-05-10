@@ -1,0 +1,638 @@
+기본 변수 : ['xmin', 'ymin', 'xmax', 'ymax','angle', 'depth_y', 'depth_mean', 'depth_x', 
+	    'depth_min', 'width', 'height', 'Misc', 'bicycle', 'car', 'person', 'train', 'truck']
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning3.csv
+
+[Tuning Method]: self-defined function
+
+[Variable]: all variables
+	   no scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,12,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 500  
+max_depth: 25
+min_samples: 2  
+max_features: 2
+
+Train: 0.999276
+Valid: 2.596599
+
+ - for MAE
+n_estimators: 500
+max_depth: 25
+min_samples: 2  
+max_features: 2
+
+
+Train: 0.552646
+Valid: 1.449704
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning4.csv
+
+[Tuning Method]: self-defined function
+
+[Variable]: -angle
+	   no scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500, 750,1000]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,12,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 500  
+max_depth: 20
+min_samples: 2  
+max_features: 2
+
+Train: 1.100838
+Valid: 2.653008
+
+
+ - for MAE
+n_estimators: 1000  
+max_depth: 30
+min_samples: 2  
+max_features: 2
+
+
+Train: 0.556848
+Valid: 1.484803
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning5.csv
+
+[Tuning Method]: self-defined function
+
+[Variable]: -angle, +depth_mean, +depth_median, +depth_max, +depth_mean_trim
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500, 750,1000]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10]
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 
+max_depth: 
+min_samples: 
+
+Train: 
+Valid: 
+
+
+ - for MAE
+n_estimators: 
+max_depth: 
+min_samples: 
+
+
+Train: 
+Valid: 
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning6.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, +depth_median, +depth_max, +depth_mean_trim
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,12,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 1000
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+Train: 1.074242    
+Valid: 2.695275          
+
+
+ - for MAE
+n_estimators: 1000
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+
+Train: 0.621148   
+Valid: 1.515684    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning7.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_x, -depth_y, -depth_mean, +depth_mean_trim
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 500
+max_depth: 30
+min_samples: 2
+max_features: 4
+
+Train: 1.042638    
+Valid: 2.688494
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 0.580942   
+Valid: 1.528489   
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning8.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_x, -depth_y, -depth_mean, +depth_mean_trim
+	   scaling
+	   label encoder + scaling
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+Train: 1.088972    
+Valid: 2.689234           
+
+
+ - for MAE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+
+Train: 0.625512
+Valid: 1.517719    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning9.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean, +depth_mean_trim
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+Train: 1.036777    
+Valid: 2.662027           
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 0.577717   
+Valid: 1.511477    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning10.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean, +depth_mean_trim
+	   non scaling
+	   label encoder + scaling
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 2
+
+Train: 1.053607    
+Valid: 2.683548           
+
+
+ - for MAE
+n_estimators: 500
+max_depth: 30
+min_samples: 2
+max_features: 4
+
+
+Train: 0.576135   
+Valid: 1.526599    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning11.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean, +depth_mean_trim
+	   non scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,35,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+Train: 1.035755    
+Valid: 2.663783
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 0.577392   
+Valid: 1.511396    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning12.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean, +depth_median
+	   scaling
+	   label encoder
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+Train: 1.116183
+Valid: 2.693589           
+
+
+ - for MAE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 4
+
+
+Train: 0.615527
+Valid: 1.508554    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning13.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean, +depth_median
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10, 20]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+Train: 
+Valid: 
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 
+Valid: 
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning14.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean
+	   non scaling
+	   label encoder 
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 4
+
+Train: 1.613465    
+Valid: 3.745752                      
+
+
+ - for MAE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 4
+
+
+Train: 0.967406   
+Valid: 2.200033       
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning15.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean
+	   non scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+Train: 
+Valid: 
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 
+Valid:     
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning16.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean
+	   scaling
+	   label encoder 
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 200
+max_depth: 20
+min_samples: 2
+max_features: 4
+
+Train: 1.625839    
+Valid: 3.743415                      
+
+
+ - for MAE
+n_estimators: 200
+max_depth: 20
+min_samples: 2
+max_features: 4
+
+
+Train: 0.972308   
+Valid: 2.197883       
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning17.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_mean
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+Train: 
+Valid: 
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 
+Valid: 
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning18.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -angle, -depth_min, -depth_x, -depth_y, +depth_mean_trim
+	   scaling
+	   label encoder 
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+Train: 1.083814    
+Valid: 2.707345           
+
+
+ - for MAE
+n_estimators: 500
+max_depth: 20
+min_samples: 2
+max_features: 2
+
+
+Train: 0.632608   
+Valid: 1.539076    
+|---------------------------------------------------------------------------------------------------
+Result: RandomForest_Tuning19.csv
+
+[Tuning Method]: self-defined function
+
+[Data]: zloc < 90
+
+[Variable]: -depth_x, -depth_y, -depth_min, +depth_mean_trim
+	   scaling
+	   onehot encoding
+
+[Parameter boundary]
+n_estimators = [50, 100, 200, 300, 500]
+max_depth = range(5,25,5)
+min_samples_split = [2, 5, 10]
+max_features = range(2,8,2)
+
+
+[Best Result]
+ - for RMSE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+Train: 
+Valid: 
+
+
+ - for MAE
+n_estimators: 300
+max_depth: 25
+min_samples: 2
+max_features: 4
+
+
+Train: 
+Valid: 
