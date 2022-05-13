@@ -40,7 +40,7 @@ class DETR():
         # 3. Preprocessing and bounding box
         # standard PyTorch mean-std input image normalization
        self.transform = transforms.Compose([
-            #transforms.Resize(800),
+            #transforms.Resize((375, 1242)),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
