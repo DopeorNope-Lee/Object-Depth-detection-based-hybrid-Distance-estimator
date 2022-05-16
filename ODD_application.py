@@ -2,6 +2,7 @@ from tqdm import tqdm
 import os
 import pandas as pd
 import numpy as np
+import pickle
 import time
 import torch
 from sklearn.model_selection import train_test_split
@@ -31,15 +32,18 @@ xgb_model.load_model(xgb_file)
 function define
 '''
 #warn=Warninggtts("warningmessage")
-#warn.saving_speaking("물체가 근접합니다")
+#warn.saving_speaking("전방을 주의하세요")
 #warn1=Warninggtts("errorgmessage")
 #warn1.saving_speaking("시스템이 정상 작동 하지 않습니다")
+
+'''
 count = 0
 # 속력 측정
 def speed_estimate(prev,current_v):
     diff=(prev-current_v)/1000
     velocity= diff*3600
     return velocity
+
 
 def odd_process(zloc,speed, count):
     if count == 1: 
@@ -53,10 +57,12 @@ def odd_process(zloc,speed, count):
             if zloc<10:
                 warn.speak()
                 
+'''
                 
 '''
 Model 및 카메라 정의
 '''
+##############################################################################################################################################
 # 모델 정의
 # DETR 불러오기
 model_path = 'facebookresearch/detr:main'
@@ -72,8 +78,21 @@ GLPdepth = GLP(glp_pretrained)
 GLPdepth.model.eval()
 GLPdepth.model.to(device)
 
+# Z-estimator 불러오기
+'''
+사용한 변수
+: xmin, ymin, xmax, ymax, depth_mean, depth_median, depth_max, depth_mean_trim, width, height, Misc, bicycle, car, person, train, truck
+
+'''
+z_model = pickle.load(open('./model/xgb_model.model', 'rb'))
+
+#스케일러 불러오기
+scaler = pickle.load(open('./model/standard_scaler.pkl', 'rb'))
+##############################################################################################################################################
+
+
 # 카메라 정의
-cap = cv2.VideoCapture('./test_video/object_video1.mp4')
+cap = cv2.VideoCapture('./test_video/object_video2.mp4')
 fourcc = cv2.VideoWriter_fourcc(*'DIVX')
 os.makedirs('./test_video/output', exist_ok=True)
 os.makedirs('./test_video/frame', exist_ok=True)
@@ -94,7 +113,7 @@ if cap.isOpened():
             #cv2.imshow("webcam",frame)
             
             # 테스트를 위해 임시로 넣음.
-            name = './test_video/frame/object_video1_'+str(currentframe)+'.jpg'
+            name = './test_video/frame/object_video2_'+str(currentframe)+'.jpg'
             
             if cv2.waitKey(1) != -1:
                 #cv2.imwrite('webcam_snap.jpg',frame)
@@ -129,27 +148,49 @@ if cap.isOpened():
             
             
             '''
-            Step3) 입력
+            Step3) 입력 및 z-model 적용
             '''
             # BBOX input
             k = 1
             xmin_list = [] ; ymin_list = [] ; xmax_list = [] ; ymax_list = []
             for p, (xmin, ymin, xmax, ymax) in zip(scores, boxes.tolist()):
+                '''
+                xmin, xmax 해서 본인 차선 range 안에 있는 object만 거리판단하기.
+                '''
                 prt = True
                 
-                #print(xmin, ymin, xmax, ymax)
+                # class extraction
                 cl = p.argmax()
                 
-                # Variable 'p' setting => no gradient
+                # class 설정
                 classes = DETR.CLASSES[cl]
-                if classes not in ['person', 'truck', 'car', 'bicycle', 'train']:
-                    continue
-                else:
-                    cl = ['person','truck','car','bicycle','train'].index(classes)
+                if classes == 'motorcycle':
+                    classes = 'bicycle'
                     
-                # rgb
+                elif classes == 'bus':
+                    classes = 'train'
+                    
+                elif classes not in ['person', 'truck', 'car', 'bicycle', 'train']:
+                    classes = 'Misc'
+                    
+                # color 맞추기
+                if classes in ['Misc','person', 'truck', 'car', 'bicycle', 'train']:
+                    cl = ['Misc','person', 'truck', 'car', 'bicycle', 'train'].index(classes)
+                else:
+                    continue
+                    
+                
+                # Detection rgb
                 r,g,b = DETR.COLORS[cl][0] * 255, DETR.COLORS[cl][1] * 255, DETR.COLORS[cl][2] * 255
                 rgb = (r,g,b)
+                
+                # Predict value1
+                x1 = xmin
+                y1 = ymin
+                x2 = xmax
+                y2 = ymax
+                width = xmax - xmin
+                height = ymax - ymin
                 
                 # depth map의 index는 최소한 0
                 if int(xmin) < 0:
@@ -157,11 +198,17 @@ if cap.isOpened():
                 if int(ymin) < 0:
                     ymin = 0
                     
+                # Predict value2
                 depth_mean = prediction[int(ymin):int(ymax),int(xmin):int(xmax)].mean()
                 depth_median = np.median(prediction[int(ymin):int(ymax),int(xmin):int(xmax)])
                 depth_mean_trim = stats.trim_mean(prediction[int(ymin):int(ymax), int(xmin):int(xmax)].flatten(), 0.2)
-                depth_min = prediction[int(ymin):int(ymax),int(xmin):int(xmax)].min()
-                xy = np.where(prediction==depth_min)
+                depth_max = prediction[int(ymin):int(ymax),int(xmin):int(xmax)].max() # ??
+                
+                #depth_min = prediction[int(ymin):int(ymax),int(xmin):int(xmax)].min() # ??
+                #xy = np.where(prediction==depth_min) # ??
+                #depth_x = xy[1][0]
+                #depth_y = xy[0][0]
+                
                 
                 '''
                 전처리
@@ -214,19 +261,50 @@ if cap.isOpened():
                                         depth_min  = np.nanmin(bbox)
                                         depth_mean = np.nanmean(bbox)
                                         
-                                    
+                    
                     # input text & draw bbox
                     if prt == True: 
+                        '''
+                        Z-model 적용
+                        '''
+                        #Misc, bicycle, car, person, train, truck
+                        if classes == 'Misc':
+                            array = torch.tensor([[1,0,0,0,0,0]])
+                        elif classes == 'bicycle':
+                            array = torch.tensor([[0,1,0,0,0,0]])
+                        elif classes == 'car':
+                            array = torch.tensor([[0,0,1,0,0,0]])
+                        elif classes == 'person':
+                            array = torch.tensor([[0,0,0,1,0,0]])
+                        elif classes == 'train':
+                            array = torch.tensor([[0,0,0,0,1,0]])
+                        elif classes == 'truck':
+                            array = torch.tensor([[0,0,0,0,0,1]])
+                        input_data = torch.tensor([[x1,y1,x2,y2,depth_mean,depth_median, depth_max, depth_mean_trim, width, height]])
+                        input_data_scaler = torch.tensor(scaler.transform(input_data)) # scaler 적용
+                        
+                        model_data = torch.cat([input_data_scaler, array], dim=1)
+                        dataframe = pd.DataFrame(model_data,columns=[0,1,2,3,4,5,6,7,8,9,'Misc','bicycle','car','person','train','truck'])
+                        
+                        # Predict
+                        d_test=xgb.DMatrix(data=dataframe)
+                        preds = z_model.predict(d_test)
+                        
+                        
                         # error1: 좌표는 int형.
                         cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), rgb, 3)
                         
-                        cv2.putText(frame, classes+' '+str(round(depth_mean,1)), (int(xmin)-5, int(ymin)-5),
+                        cv2.putText(frame, classes+' '+str(np.round(preds,1)), (int(xmin)-5, int(ymin)-5),
                                     cv2.FONT_HERSHEY_SIMPLEX, 1, rgb, 1,
                                     lineType=cv2.LINE_AA)
+                        
+                    
                                     
 
             cv2.imshow('video1', frame)
-            # Save Video (depth image)
+            # Save Video
+            # 실험때는 주석 제거
+            
             out.write(frame)
 
         else:
@@ -244,6 +322,6 @@ else:
     
 # OpenCV 중지
 cap.release()
-out.release()
+out.release() # 이것도 실험 때는 제거
 cv2.destroyAllWindows()   
 
