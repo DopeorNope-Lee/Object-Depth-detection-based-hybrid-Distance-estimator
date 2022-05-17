@@ -89,24 +89,25 @@ scaler = pickle.load(open('./model/standard_scaler.pkl', 'rb'))
 
 
 # 카메라 정의
-cap = cv2.VideoCapture('./test_video/object_video2.mp4')
-fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+#cap = cv2.VideoCapture('./test_video/object_video2.mp4')
+cap = cv2.VideoCapture(0)
+#fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 os.makedirs('./test_video/output', exist_ok=True)
 os.makedirs('./test_video/frame', exist_ok=True)
-out = cv2.VideoWriter('./test_video/output/ODD_test.mp4', fourcc, 30.0, (1242,374))
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1242) # 가로
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 374) # 세로
+#out = cv2.VideoWriter('./test_video/output/ODD_test.mp4', fourcc, 30.0, (1242,374))
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1242) # 가로
+#cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 374) # 세로
 
 
 '''
 # 비디오 작동하기
 '''
-start = time.time() # 시간 측정 시작
 currentframe = 1
 if cap.isOpened():
     while(True):
         ret, frame= cap.read()
         if ret:
+            start = time.time() # 시간 측정 시작
             #cv2.imshow("webcam",frame)
             
             # 테스트를 위해 임시로 넣음.
@@ -282,45 +283,58 @@ if cap.isOpened():
             
             # input text & draw bbox
             for k in data.index:
-                classes = data.iloc[k,-2] # class info
-                '''
-                Z-model 적용
-                '''
-                #Misc, bicycle, car, person, train, truck
-                if classes == 'Misc':
-                    array = torch.tensor([[1,0,0,0,0,0]])
-                elif classes == 'bicycle':
-                    array = torch.tensor([[0,1,0,0,0,0]])
-                elif classes == 'car':
-                    array = torch.tensor([[0,0,1,0,0,0]])
-                elif classes == 'person':
-                    array = torch.tensor([[0,0,0,1,0,0]])
-                elif classes == 'train':
-                    array = torch.tensor([[0,0,0,0,1,0]])
-                elif classes == 'truck':
-                    array = torch.tensor([[0,0,0,0,0,1]])
-                #input_data = torch.tensor([[x1,y1,x2,y2,depth_mean,depth_median, depth_max, depth_mean_trim, width, height]])
-                #input_data_scaler = torch.tensor(scaler.transform(input_data)) # scaler 적용
-                input_data_scaler = torch.tensor(scaler.transform(data.iloc[[k],0:10]))
+                x_range = np.arange(int(data.iloc[k,0]), int(data.iloc[k,2])+1) # xmax~xmin 
+                line_range = np.arange(500, 742+1)
                 
-                model_data = torch.cat([input_data_scaler, array], dim=1)
-                dataframe = pd.DataFrame(model_data,columns=[0,1,2,3,4,5,6,7,8,9,'Misc','bicycle','car','person','train','truck'])
-                
-                # Predict
-                d_test=xgb.DMatrix(data=dataframe)
-                preds = z_model.predict(d_test)
-                
-                # error1: 좌표는 int형.
-                cv2.rectangle(frame, (int(data.iloc[k,0]), int(data.iloc[k,1])), (int(data.iloc[k,2]), int(data.iloc[k,3])), data.iloc[k,12], 2)
-                
-                cv2.putText(frame, data.iloc[k,-2]+str(np.round(preds,1)), (int(data.iloc[k,0])-5, int(data.iloc[k,1])-5),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, data.iloc[k,-1], 2,
-                            lineType=cv2.LINE_AA)
+                # 겹칠 때 판단하기
+                if len(np.intersect1d(x_range, line_range)) >= 10: 
+                    classes = data.iloc[k,-2] # class info
+                    '''
+                    Z-model 적용
+                    '''
+                    #Misc, bicycle, car, person, train, truck
+                    if classes == 'Misc':
+                        array = torch.tensor([[1,0,0,0,0,0]])
+                    elif classes == 'bicycle':
+                        array = torch.tensor([[0,1,0,0,0,0]])
+                    elif classes == 'car':
+                        array = torch.tensor([[0,0,1,0,0,0]])
+                    elif classes == 'person':
+                        array = torch.tensor([[0,0,0,1,0,0]])
+                    elif classes == 'train':
+                        array = torch.tensor([[0,0,0,0,1,0]])
+                    elif classes == 'truck':
+                        array = torch.tensor([[0,0,0,0,0,1]])
+                    #input_data = torch.tensor([[x1,y1,x2,y2,depth_mean,depth_median, depth_max, depth_mean_trim, width, height]])
+                    #input_data_scaler = torch.tensor(scaler.transform(input_data)) # scaler 적용
+                    input_data_scaler = torch.tensor(scaler.transform(data.iloc[[k],0:10]))
                     
+                    model_data = torch.cat([input_data_scaler, array], dim=1)
+                    dataframe = pd.DataFrame(model_data,columns=[0,1,2,3,4,5,6,7,8,9,'Misc','bicycle','car','person','train','truck'])
+                    
+                    # Predict
+                    d_test=xgb.DMatrix(data=dataframe)
+                    preds = z_model.predict(d_test)
+                    
+                    # error1: 좌표는 int형.
+                    cv2.rectangle(frame, (int(data.iloc[k,0]), int(data.iloc[k,1])), (int(data.iloc[k,2]), int(data.iloc[k,3])), data.iloc[k,12], 2)
+                    
+                    cv2.putText(frame, data.iloc[k,-2]+str(np.round(preds,1)), (int(data.iloc[k,0])-5, int(data.iloc[k,1])-5),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, data.iloc[k,-1], 2,
+                                lineType=cv2.LINE_AA)
+                
+                
+            # 인식되는 차로를 1차선으로 제한하기
+            cv2.line(frame,  (500,0), (500,374), (124, 252, 0))
+            cv2.line(frame,  (742,0), (742,374), (124, 252, 0))
+            
             cv2.imshow('video1', frame)
             
             # Save Video
-            out.write(frame) # 실험 때는 제거
+            #out.write(frame) # 실험 때는 제거
+            
+            end = time.time() # 시간 측정 끝
+            print(f"{end - start:.5f} sec") # each frame:
 
         else:
             print("프레임을 받을 수 없습니다.")
@@ -332,12 +346,10 @@ if cap.isOpened():
 else:
     print('파일을 열 수 없습니다')
     #warn1.speak()
-    
-end = time.time() # 시간 측정 끝
-print(f"{end - start:.5f} sec") # each frame:
+
     
 # OpenCV 중지
 cap.release()
-out.release() # 이것도 실험 때는 제거
+#out.release() # 이것도 실험 때는 제거
 cv2.destroyAllWindows()   
 
